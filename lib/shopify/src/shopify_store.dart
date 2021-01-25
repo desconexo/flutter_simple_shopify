@@ -398,7 +398,7 @@ class ShopifyStore with ShopifyError {
     String query,
     int limit,
     String cursor, {
-    SortKeyProduct sortKey,
+    SortKeyProduct sortKey = SortKeyProduct.TITLE,
     bool deleteThisPartOfCache = false,
     bool reverse = false,
     Function(String, bool) callback,
@@ -415,10 +415,14 @@ class ShopifyStore with ShopifyError {
         });
     final QueryResult result =
         await ShopifyConfig.graphQLClient.query(_options);
+    print("RESULT: ${result.data}");
+    print("EXCEPTION: ${result.exception}");
+    print("SOURCE: ${result.source}");
     checkForError(result);
     tempProduct =
         (Products.fromJson((result?.data ?? const {})["products"] ?? {}));
-    callback(result.data['products']['edges'].last['cursor'],
+
+    callback(tempProduct.productList.last.cursor,
         tempProduct.hasNextPage);
     if (deleteThisPartOfCache) {
       _graphQLClient.cache.write(_options.toKey(), null);

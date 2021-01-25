@@ -25,13 +25,17 @@ class ShopifyAuth with ShopifyError {
 
   /// Tries to create a new user account with the given email address and password.
     Future<ShopifyUser> createUserWithEmailAndPassword(
-      {@required String email, @required String password, bool deleteThisPartOfCache = false}) async {
+      {@required String email, @required String password, @required String firstName, @required String lastName, bool deleteThisPartOfCache = false}) async {
     assert(email != null);
     assert(password != null);
+    assert(firstName != null);
+    assert(lastName != null);
     final MutationOptions _options =
     MutationOptions(documentNode: gql(customerCreateMutation), variables: {
       'email': email,
       'password': password,
+      'firstName': firstName,
+      'lastName': lastName,
     });
     final QueryResult result = await _graphQLClient.mutate(_options);
     print(result.exception.toString());

@@ -62,8 +62,6 @@ class ShopifyCheckout with ShopifyError{
           documentNode: gql(getAllOrdersQuery),
           variables: {
             'accessToken': customerAccessToken,
-            'sortKey': sortKey.parseToString(),
-            'reverse': reverse
           }
       );
       final QueryResult result = await ShopifyConfig.graphQLClient.query(_options);
